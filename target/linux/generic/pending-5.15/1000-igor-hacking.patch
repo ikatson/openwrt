@@ -1,14 +1,15 @@
 --- a/drivers/net/wireguard/socket.c
 +++ b/drivers/net/wireguard/socket.c
-@@ -27,6 +27,7 @@ static int send4(struct wg_device *wg, s
- 		.flowi4_mark = wg->fwmark,
- 		.flowi4_proto = IPPROTO_UDP
- 	};
-+	printk(KERN_INFO "wgdbg[0]: send4 fl: saddr=%pI4, daddr=%pI4\n", &fl.saddr, &fl.daddr);
- 	struct rtable *rt = NULL;
+@@ -31,6 +31,8 @@ static int send4(struct wg_device *wg, s
  	struct sock *sock;
  	int ret = 0;
-@@ -48,10 +49,15 @@ static int send4(struct wg_device *wg, s
+ 
++	printk(KERN_INFO "wgdbg[0]: send4 fl: saddr=%pI4, daddr=%pI4\n", &fl.saddr, &fl.daddr);
++
+ 	skb_mark_not_on_list(skb);
+ 	skb->dev = wg->dev;
+ 	skb->mark = wg->fwmark;
+@@ -48,10 +50,15 @@ static int send4(struct wg_device *wg, s
  	if (cache)
  		rt = dst_cache_get_ip4(cache, &fl.saddr);
  
@@ -24,7 +25,7 @@
  			endpoint->src4.s_addr = 0;
  			endpoint->src_if4 = 0;
  			fl.saddr = 0;
-@@ -64,6 +70,7 @@ static int send4(struct wg_device *wg, s
+@@ -64,6 +71,7 @@ static int send4(struct wg_device *wg, s
  			     rt->dst.dev->ifindex != endpoint->src_if4)))) {
  			endpoint->src4.s_addr = 0;
  			endpoint->src_if4 = 0;
@@ -32,7 +33,7 @@
  			fl.saddr = 0;
  			if (cache)
  				dst_cache_reset(cache);
-@@ -82,6 +89,7 @@ static int send4(struct wg_device *wg, s
+@@ -82,6 +90,7 @@ static int send4(struct wg_device *wg, s
  	}
  
  	skb->ignore_df = 1;
