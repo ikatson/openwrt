@@ -1,0 +1,29 @@
+--- a/arch/arm/kernel/perf_callchain.c
++++ b/arch/arm/kernel/perf_callchain.c
+@@ -22,7 +22,7 @@
+  */
+ struct frame_tail {
+ 	struct frame_tail __user *fp;
+-	unsigned long sp;
++	// unsigned long sp;
+ 	unsigned long lr;
+ } __attribute__((packed));
+ 
+@@ -56,7 +56,7 @@ user_backtrace(struct frame_tail __user
+ 	if (tail + 1 >= buftail.fp)
+ 		return NULL;
+ 
+-	return buftail.fp - 1;
++	return buftail.fp;
+ }
+ 
+ void
+@@ -75,7 +75,7 @@ perf_callchain_user(struct perf_callchai
+ 	if (!current->mm)
+ 		return;
+ 
+-	tail = (struct frame_tail __user *)regs->ARM_fp - 1;
++	tail = (struct frame_tail __user *)regs->ARM_fp;
+ 
+ 	while ((entry->nr < entry->max_stack) &&
+ 	       tail && !((unsigned long)tail & 0x3))
