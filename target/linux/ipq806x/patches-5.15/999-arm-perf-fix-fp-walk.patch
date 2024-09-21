@@ -5,7 +5,6 @@
  struct frame_tail {
  	struct frame_tail __user *fp;
 -	unsigned long sp;
-+	// unsigned long sp;
  	unsigned long lr;
  } __attribute__((packed));
  
